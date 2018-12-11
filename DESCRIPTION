@@ -2,7 +2,7 @@ Package: MC6068
 Title: Large Matrix Completion
 Version: 0.0.0.9000
 Authors@R: c(person(c("Ye", "Yuan"), email = "yuanyemd@ufl.edu", role = "aut",person(c("Qianyu","Wen"),email="qianyu.wen@ufl.edu",role = "cre"))
-Description:This package provide SOFT-IMPUTE algorithm, proposed by Dr.Robert Tibshirani et al for the nuclear norm regularized least-squares problem that scales to large problems.Iteratively, this algorithm replaces the missing elements with those obtained from a soft-thresholded SVD.At every iteration SOFT-IMPUTE decreases the value of the objective function towards its minimum, and at the same time gets closer to the set of optimal solutions of the problem. 
+Description:This package provide SOFT-IMPUTE algorithm for the nuclear norm regularized least-squares problem that scales to large problems. Iteratively, this algorithm replaces the missing elements with those obtained from a soft-thresholded SVD. At every iteration SOFT-IMPUTE decreases the value of the objective function towards its minimum, and at the same time gets closer to the set of optimal solutions of the problem. Reference: Rahul Mazumder, Trevor Hastie, and Robert Tibshirani, 2010, Journal of Machine Learning Research 11(2010)2287-2322. 
 Depends: R (>= 3.4.1)
 License: What license is it under?
 Encoding: UTF-8
