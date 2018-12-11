@@ -16,50 +16,47 @@ knitr::opts_chunk$set(
 )
 ```
 
-Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
+## Introduction
 
-- Never uses retina figures
-- Has a smaller default figure size
-- Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+This package provides SOFT-IMPUTE algorithm, proposed by Dr.Robert Tibshirani et al, for the nuclear norm regularized least-squares problem that scales to large problems. Iteratively, this algorithm replaces the missing elements with those obtained from a soft-thresholded SVD. At every iteration this method decreases the value of the objective function towards its minimum, and at the same time gets closer to the set of optimal solutions of the problem. 
 
-## Vignette Info
+## Description
 
-Note the various macros within the `vignette` section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+This package only contains 1 function, AdmmMC. This function can be used to complete large low rank matrix with missing elements.
 
-## Styles
+3.1 Parameters:
+#### x: The matrix with missing value of your interest. Please transform to matrix if not, e.g. as.matrix()
+#### iniMatrix: The matrix with your initial guess replacing the missing value. If no input for this parameter, the function will use 1/2(min+max) as the initial value for all the missing elements in the matrix
+#### error: The error you can stand for convergence. The default setting is 1e-16
+#### lambda: Regularization parameter controlling the nuclear norm of the minimizer Z. The default setting is 0.5
+#### silence: The function will automatically show step number and objective function value after each iteration. Please change to "F" if you don't want to track each iteration
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+3.2 Return: The function will return a matrix with same dimention as your matrix of interest. All the missing values will be replaced by the elements of the estimated Z in last iteration
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
 
-## Figures
+## Example
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
+The testing dataset is a incomplete matrix from the famous Mona Lisa picture (jpg). Twenty percent of elements are randomly selected and deleted. The incomplete matrix is saved as an external data in the package in a form of dataframe, named mona. The matrix with missing values is plotted and unfortunately Mona Lisa is not smilling!!!
 
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+library(jpeg)
+library(gplots)
+library(MC6068)
+data(mona,package="MC6068")
+heatmap.2(as.matrix(mona), Rowv = NA, 
+          Colv = NA, key = F, scale = "none", 
+          col = grey.colors,
+          trace = "none",
+          labRow = "", labCol = "")
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+The incomplete matrix will be completed by AdmmMC function. The function is muted by changing silence argument to "F". The completed matrix is plotted and Mona Lisa is smilling again!
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r}
+SmileAgain <- AdmmMC(x=as.matrix(mona), silence=T)
+heatmap.2(SmileAgain, Rowv = NA, 
+          Colv = NA, key = F, scale = "none", 
+          col = grey.colors,
+          trace = "none",
+          labRow = "", labCol = "")
 ```
-
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
